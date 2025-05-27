@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tab } from '@headlessui/react';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 
 function classNames(...classes) {
@@ -23,6 +24,24 @@ const staggerContainer = {
 
 const App = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  useEffect(() => {
+    // Set background color for html and body elements
+    const bgColor = isDarkMode ? '#050d1a' : '#f0f4f8';
+    document.documentElement.style.backgroundColor = bgColor;
+    document.body.style.backgroundColor = bgColor;
+    
+    // Clean up when component unmounts
+    return () => {
+      document.documentElement.style.backgroundColor = '';
+      document.body.style.backgroundColor = '';
+    };
+  }, [isDarkMode]);
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
 
   const projects = [
     {
@@ -82,8 +101,28 @@ const App = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a192f] text-white p-4 pb-16">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-[#050d1a] text-white' : 'bg-[#f0f4f8] text-gray-900'} p-4 pb-16 transition-colors duration-200`}>
       <div className="max-w-5xl mx-auto space-y-12">
+        {/* Theme Toggle Button */}
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          onClick={toggleTheme}
+          className={`fixed top-4 right-4 p-2 rounded-lg ${
+            isDarkMode 
+              ? 'bg-white/10 hover:bg-white/20' 
+              : 'bg-gray-200 hover:bg-gray-300'
+          } transition-colors duration-200`}
+          aria-label="Toggle theme"
+        >
+          {isDarkMode ? (
+            <SunIcon className="h-6 w-6" />
+          ) : (
+            <MoonIcon className="h-6 w-6" />
+          )}
+        </motion.button>
+
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -100,7 +139,7 @@ const App = () => {
               <img
                 src="/newpage/images/profile.jpg"
                 alt="Saunak Roy"
-                className="w-48 h-48 rounded-full object-cover"
+                className="w-48 h-48 rounded-full object-cover object-[50%_35%]"
               />
             </motion.div>
           </div>
@@ -119,10 +158,14 @@ const App = () => {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-300 hover:text-white transition-colors duration-200 flex items-center space-x-2 bg-white/10 px-4 py-2 rounded-lg hover:bg-white/20"
+              className={`${
+                isDarkMode 
+                  ? 'text-gray-300 hover:text-white bg-white/10 hover:bg-white/20' 
+                  : 'text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200'
+              } transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg`}
               variants={fadeInUp}
             >
-              {item.icon}
+              <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{item.icon}</span>
               <span>{item.name}</span>
             </motion.a>
           ))}
@@ -134,7 +177,9 @@ const App = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Tab.List className="flex space-x-1 rounded-xl bg-blue-900/20 p-1 mb-8">
+            <Tab.List className={`flex space-x-1 rounded-xl ${
+              isDarkMode ? 'bg-blue-900/20' : 'bg-blue-100'
+            } p-1 mb-8`}>
               {['About', 'Projects', 'Resume'].map((tab) => (
                 <Tab
                   key={tab}
@@ -144,7 +189,9 @@ const App = () => {
                       'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
                       selected
                         ? 'bg-white text-blue-900 shadow'
-                        : 'text-white hover:bg-white/[0.12]'
+                        : isDarkMode
+                          ? 'text-white hover:bg-white/[0.12]'
+                          : 'text-gray-600 hover:bg-gray-100'
                     )
                   }
                 >
@@ -155,7 +202,9 @@ const App = () => {
           </motion.div>
           
           <Tab.Panels className="mt-2">
-            <Tab.Panel className="rounded-xl bg-white/[0.05] p-6">
+            <Tab.Panel className={`rounded-xl ${
+              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
+            } p-6`}>
               <motion.div 
                 className="space-y-6"
                 variants={staggerContainer}
@@ -184,7 +233,9 @@ const App = () => {
               </motion.div>
             </Tab.Panel>
             
-            <Tab.Panel className="rounded-xl bg-white/[0.05] p-6">
+            <Tab.Panel className={`rounded-xl ${
+              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
+            } p-6`}>
               <motion.div 
                 className="space-y-8"
                 variants={staggerContainer}
@@ -194,11 +245,15 @@ const App = () => {
                 {projects.map((project, index) => (
                   <motion.div
                     key={index}
-                    className="border border-white/20 rounded-lg p-6 hover:bg-white/[0.05] transition-colors"
+                    className={`border ${
+                      isDarkMode 
+                        ? 'border-white/20 hover:bg-white/[0.05]' 
+                        : 'border-gray-200 hover:bg-blue-50'
+                    } rounded-lg p-6 transition-colors`}
                     variants={fadeInUp}
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="text-xl font-semibold">{project.title}</h3>
+                      <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{project.title}</h3>
                       <a
                         href={project.link}
                         target="_blank"
@@ -208,12 +263,16 @@ const App = () => {
                         Link
                       </a>
                     </div>
-                    <p className="text-gray-300 mb-4">{project.description}</p>
+                    <p className={isDarkMode ? 'text-gray-300 mb-4' : 'text-gray-700 mb-4'}>{project.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.map((tech, techIndex) => (
                         <span
                           key={techIndex}
-                          className="px-3 py-1 bg-blue-900/40 rounded-full text-sm"
+                          className={`px-3 py-1 rounded-full text-sm ${
+                            isDarkMode 
+                              ? 'bg-blue-900/40' 
+                              : 'bg-blue-100 text-blue-800'
+                          }`}
                         >
                           {tech}
                         </span>
@@ -224,7 +283,9 @@ const App = () => {
               </motion.div>
             </Tab.Panel>
             
-            <Tab.Panel className="rounded-xl bg-white/[0.05] p-6">
+            <Tab.Panel className={`rounded-xl ${
+              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
+            } p-6`}>
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -248,9 +309,11 @@ const App = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-center py-8 mt-16 border-t border-white/10"
+          className={`text-center py-8 mt-16 border-t ${
+            isDarkMode ? 'border-white/10' : 'border-gray-200'
+          }`}
         >
-          <p className="text-gray-400">© Copyright 2025 Saunak Roy.</p>
+          <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>© Copyright 2025 Saunak Roy.</p>
         </motion.footer>
       </div>
     </div>
