@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Portfolio website",
   "main": "index.js",
+  "homepage": "https://saunakroy.github.io/newpage",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [],
   "author": "",
@@ -15,14 +18,15 @@
     "@babel/core": "^7.27.1",
     "@babel/preset-env": "^7.27.2",
     "@babel/preset-react": "^7.27.1",
-    "@headlessui/react": "^2.2.4",
-    "@heroicons/react": "^2.2.0",
+    "@headlessui/react": "^1.7.18",
+    "@heroicons/react": "^2.1.1",
     "autoprefixer": "^10.4.14",
     "babel-loader": "^10.0.0",
-    "css-loader": "^7.1.2",
+    "css-loader": "^6.10.0",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.4.31",
     "postcss-loader": "^8.1.1",
-    "style-loader": "^4.0.0",
+    "style-loader": "^3.3.4",
     "tailwindcss": "^3.3.0",
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1",
@@ -30,8 +34,8 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.6",
-    "framer-motion": "^12.14.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "framer-motion": "^11.0.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }
