@@ -26,14 +26,28 @@ const App = () => {
 
   const projects = [
     {
-      title: "Machine Learning Healthcare Project",
-      description: "Developed a deep learning model for medical image analysis using PyTorch and TensorFlow.",
-      technologies: ["Python", "PyTorch", "TensorFlow", "OpenCV"]
+      title: "Brain Tumor Classification",
+      description: "Developed a custom CNN architecture and utilized transfer learning models like ResNet to classify MRI scans of brain tumors. Achieved an F1 score of 0.96 through data augmentation and regularization techniques. This project served as an introduction to computer vision and image classification fundamentals.",
+      technologies: ["Python", "TensorFlow", "CNN", "Transfer Learning", "OpenCV"],
+      link: "https://github.com/saunakroy/Brain-Tumor-Classification/blob/main/brainML.ipynb"
     },
     {
-      title: "Computer Vision Research",
-      description: "Conducted research on advanced object detection algorithms for medical applications.",
-      technologies: ["Python", "OpenCV", "YOLO", "Keras"]
+      title: "SIGCSE 2025 Research Paper",
+      description: "Published research examining undergraduate AI literacy at UMD during the OUR Summer Research internship. Utilized R and NVivo for data analysis and visualization, uncovering correlations between students' technical AI knowledge and their perception of AI risks. Paper accepted and presented at ACM SIGCSE 2025 conference.",
+      technologies: ["R", "NVivo", "Data Analysis", "Research", "Data Visualization"],
+      link: "https://drive.google.com/file/d/1PZYVS4tUz96Lc9AKLdC-QrCUDICeRBNJ/view"
+    },
+    {
+      title: "TSP Algorithms Implementation",
+      description: "Implemented and analyzed seven different algorithms for solving the Traveling Salesman Problem using Python. Created detailed visualizations comparing efficiency, runtime, and cost metrics. This comprehensive project enhanced algorithmic thinking skills through practical implementation.",
+      technologies: ["Python", "Algorithms", "Data Structures", "Optimization", "Data Visualization"],
+      link: "https://github.com/saunakroy/Solving-TSP-HW/blob/main/Saunak_Roy_TSP.ipynb"
+    },
+    {
+      title: "US Wage Analysis",
+      description: "Developed a comprehensive tutorial analyzing 49 years of US wage data using data science and machine learning techniques. Implemented regression, ANOVA, and t-tests to assess wage impacts and predict trends, achieving R-squared values up to 0.95. Project completed as part of Introduction to Data Science coursework.",
+      technologies: ["Python", "Machine Learning", "Statistical Analysis", "Data Science", "Regression"],
+      link: "https://github.com/saunakroy/320-Final-Project/blob/main/320wagesfinalproject.ipynb"
     }
   ];
 
@@ -68,16 +82,30 @@ const App = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-navy-900 text-white p-4">
-      <div className="max-w-5xl mx-auto">
-        <motion.h1 
-          className="text-4xl font-bold text-center mb-8 mt-8"
+    <div className="min-h-screen bg-[#0a192f] text-white p-4 pb-16">
+      <div className="max-w-5xl mx-auto space-y-12">
+        <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
+          className="text-center pt-8"
         >
-          Saunak Roy
-        </motion.h1>
+          <div className="mb-6 flex justify-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+              className="rounded-full border-4 border-white p-1 shadow-xl"
+            >
+              <img
+                src="/newpage/images/profile.jpg"
+                alt="Saunak Roy"
+                className="w-48 h-48 rounded-full object-cover"
+              />
+            </motion.div>
+          </div>
+          <h1 className="text-4xl font-bold mb-8">Saunak Roy</h1>
+        </motion.div>
         
         <motion.div 
           className="flex justify-center space-x-6 mb-8"
@@ -169,7 +197,17 @@ const App = () => {
                     className="border border-white/20 rounded-lg p-6 hover:bg-white/[0.05] transition-colors"
                     variants={fadeInUp}
                   >
-                    <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-xl font-semibold">{project.title}</h3>
+                      <a
+                        href={project.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium"
+                      >
+                        Link
+                      </a>
+                    </div>
                     <p className="text-gray-300 mb-4">{project.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {project.technologies.map((tech, techIndex) => (
@@ -188,19 +226,32 @@ const App = () => {
             
             <Tab.Panel className="rounded-xl bg-white/[0.05] p-6">
               <motion.div 
-                className="text-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
+                className="space-y-4"
               >
-                <p className="text-xl mb-4">Resume coming soon!</p>
-                <p className="text-gray-300">
-                  This section will be updated with my detailed professional experience and educational background.
-                </p>
+                <div className="relative w-full" style={{ height: "1300px" }}>
+                  <iframe
+                    src="/newpage/SR_Resume.pdf#view=FitH"
+                    className="absolute top-0 left-0 w-full h-full rounded-lg bg-white"
+                    style={{ border: "none" }}
+                    title="Resume"
+                  />
+                </div>
               </motion.div>
             </Tab.Panel>
           </Tab.Panels>
         </Tab.Group>
+        
+        <motion.footer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center py-8 mt-16 border-t border-white/10"
+        >
+          <p className="text-gray-400">© Copyright 2025 Saunak Roy.</p>
+        </motion.footer>
       </div>
     </div>
   );
