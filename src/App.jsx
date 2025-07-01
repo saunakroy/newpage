@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Tab } from '@headlessui/react';
+import React, { useState, useEffect, useRef } from 'react';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
@@ -22,22 +21,57 @@ const staggerContainer = {
   }
 };
 
+const navLinks = [
+  { name: 'About', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Resume', href: '#resume' },
+];
+
 const App = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [activeSection, setActiveSection] = useState('about');
+
+  // Refs for each section
+  const aboutRef = useRef(null);
+  const projectsRef = useRef(null);
+  const resumeRef = useRef(null);
 
   useEffect(() => {
-    // Set background color for html and body elements
     const bgColor = isDarkMode ? '#050d1a' : '#f0f4f8';
     document.documentElement.style.backgroundColor = bgColor;
     document.body.style.backgroundColor = bgColor;
-    
-    // Clean up when component unmounts
+    document.documentElement.style.scrollBehavior = 'smooth';
     return () => {
       document.documentElement.style.backgroundColor = '';
       document.body.style.backgroundColor = '';
+      document.documentElement.style.scrollBehavior = '';
     };
   }, [isDarkMode]);
+
+  useEffect(() => {
+    const sectionRefs = [
+      { id: 'about', ref: aboutRef },
+      { id: 'projects', ref: projectsRef },
+      { id: 'resume', ref: resumeRef },
+    ];
+    function onScroll() {
+      const scrollPos = window.scrollY + window.innerHeight / 4;
+      let current = 'about';
+      for (let i = 0; i < sectionRefs.length; i++) {
+        const section = sectionRefs[i].ref.current;
+        if (section) {
+          const { top } = section.getBoundingClientRect();
+          if (top + window.scrollY - 80 <= scrollPos) {
+            current = sectionRefs[i].id;
+          }
+        }
+      }
+      setActiveSection(current);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -70,10 +104,6 @@ const App = () => {
     }
   ];
 
-  const handleProjectsClick = () => {
-    setSelectedTab(1);
-  };
-
   const socialLinks = [
     {
       name: 'Email',
@@ -102,32 +132,60 @@ const App = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-[#050d1a] text-white' : 'bg-[#f0f4f8] text-gray-900'} p-4 pb-16 transition-colors duration-200`}>
-      <div className="max-w-5xl mx-auto space-y-12">
-        {/* Theme Toggle Button */}
-        <motion.button
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          onClick={toggleTheme}
-          className={`fixed top-4 right-4 p-2 rounded-lg ${
-            isDarkMode 
-              ? 'bg-white/10 hover:bg-white/20' 
-              : 'bg-gray-200 hover:bg-gray-300'
-          } transition-colors duration-200`}
-          aria-label="Toggle theme"
-        >
-          {isDarkMode ? (
-            <SunIcon className="h-6 w-6" />
-          ) : (
-            <MoonIcon className="h-6 w-6" />
-          )}
-        </motion.button>
+      <header className={`fixed top-0 left-0 right-0 z-10 transition-colors duration-200 ${isDarkMode ? 'bg-[#050d1a]/80 backdrop-blur-sm' : 'bg-[#f0f4f8]/80 backdrop-blur-sm'}`}>
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="flex justify-center">
+            <div className="bg-gray-500/30 border border-gray-300/30 rounded-xl shadow-md px-6 py-2 backdrop-blur-md mt-2">
+              <nav className="relative flex justify-center space-x-8">
+                {navLinks.map((link, idx) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className={`relative font-medium px-2 py-1 transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
+                    style={{ zIndex: 1 }}
+                  >
+                    {link.name}
+                    {activeSection === link.href.replace('#', '') && (
+                      <motion.div
+                        layoutId="nav-slider"
+                        className="absolute left-0 right-0 -bottom-1 h-1 rounded bg-white"
+                        style={{ zIndex: 0 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                      />
+                    )}
+                  </a>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </div>
+      </header>
 
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+        onClick={toggleTheme}
+        className={`fixed top-4 right-4 p-2 rounded-lg z-20 ${
+          isDarkMode 
+            ? 'bg-white/10 hover:bg-white/20' 
+            : 'bg-gray-300 hover:bg-gray-400'
+        } transition-colors duration-200`}
+        aria-label="Toggle theme"
+      >
+        {isDarkMode ? (
+          <SunIcon className="h-7 w-7" />
+        ) : (
+          <MoonIcon className="h-7 w-7" />
+        )}
+      </motion.button>
+      
+      <div className="max-w-5xl mx-auto space-y-12 pt-24">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center pt-8"
+          className="text-center"
         >
           <div className="mb-6 flex justify-center">
             <motion.div
@@ -161,8 +219,8 @@ const App = () => {
               className={`${
                 isDarkMode 
                   ? 'text-gray-300 hover:text-white bg-white/10 hover:bg-white/20' 
-                  : 'text-gray-600 hover:text-gray-900 bg-gray-100 hover:bg-gray-200'
-              } transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg`}
+                  : 'text-gray-700 hover:text-gray-900 bg-gray-200 hover:bg-gray-300'
+              } transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg text-base`}
               variants={fadeInUp}
             >
               <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{item.icon}</span>
@@ -171,40 +229,10 @@ const App = () => {
           ))}
         </motion.div>
         
-        <Tab.Group selectedIndex={selectedTab} onChange={setSelectedTab}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Tab.List className={`flex space-x-1 rounded-xl ${
-              isDarkMode ? 'bg-blue-900/20' : 'bg-blue-100'
-            } p-1 mb-8`}>
-              {['About', 'Projects', 'Resume'].map((tab) => (
-                <Tab
-                  key={tab}
-                  className={({ selected }) =>
-                    classNames(
-                      'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
-                      'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-                      selected
-                        ? 'bg-white text-blue-900 shadow'
-                        : isDarkMode
-                          ? 'text-white hover:bg-white/[0.12]'
-                          : 'text-gray-600 hover:bg-gray-100'
-                    )
-                  }
-                >
-                  {tab}
-                </Tab>
-              ))}
-            </Tab.List>
-          </motion.div>
-          
-          <Tab.Panels className="mt-2">
-            <Tab.Panel className={`rounded-xl ${
-              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
-            } p-6`}>
+        <main className="space-y-24">
+          <section id="about" ref={aboutRef} className="pt-16 -mt-16">
+            <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>About Me</h2>
+            <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
               <motion.div 
                 className="space-y-6"
                 variants={staggerContainer}
@@ -222,20 +250,18 @@ const App = () => {
                   variants={fadeInUp}
                 >
                   During my undergraduate years, I've been fascinated by the fields of machine learning, computer vision, and data science, and most of my work revolves around these fields. I'm curious to learn about the ways these fields intertwine and are applied in other fields, like healthcare. My goal is to enroll in a graduate program where I hope to further my exploration of these fields in depth by conducting cutting-edge research. I hope to maintain this portfolio throughout my career to highlight all the professional milestones I cross and the impactful academic/societal contributions I make. Click on the {' '}
-                  <button 
-                    onClick={handleProjectsClick}
-                    className="text-blue-400 hover:text-blue-300 underline focus:outline-none"
-                  >
+                  <a href="#projects" className="text-blue-400 hover:text-blue-300 underline focus:outline-none">
                     Projects
-                  </button>
-                  {' '}tab to view several artifacts showcasing my diverse technical skill set.
+                  </a>
+                  {' '}section to view several artifacts showcasing my diverse technical skill set.
                 </motion.p>
               </motion.div>
-            </Tab.Panel>
-            
-            <Tab.Panel className={`rounded-xl ${
-              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
-            } p-6`}>
+            </div>
+          </section>
+          
+          <section id="projects" ref={projectsRef} className="pt-16 -mt-16">
+            <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Projects</h2>
+            <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
               <motion.div 
                 className="space-y-8"
                 variants={staggerContainer}
@@ -245,11 +271,7 @@ const App = () => {
                 {projects.map((project, index) => (
                   <motion.div
                     key={index}
-                    className={`border ${
-                      isDarkMode 
-                        ? 'border-white/20 hover:bg-white/[0.05]' 
-                        : 'border-gray-200 hover:bg-blue-50'
-                    } rounded-lg p-6 transition-colors`}
+                    className={`border ${ isDarkMode ? 'border-white/20 hover:bg-white/[0.05]' : 'border-gray-200 hover:bg-blue-50' } rounded-lg p-6 transition-colors`}
                     variants={fadeInUp}
                   >
                     <div className="flex justify-between items-start mb-2">
@@ -258,7 +280,7 @@ const App = () => {
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors text-sm font-medium"
+                        className={`px-4 py-1.5 rounded transition-colors font-medium ${ isDarkMode ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-blue-700 text-white hover:bg-blue-800' } text-base`}
                       >
                         Link
                       </a>
@@ -268,11 +290,7 @@ const App = () => {
                       {project.technologies.map((tech, techIndex) => (
                         <span
                           key={techIndex}
-                          className={`px-3 py-1 rounded-full text-sm ${
-                            isDarkMode 
-                              ? 'bg-blue-900/40' 
-                              : 'bg-blue-100 text-blue-800'
-                          }`}
+                          className={`px-3 py-1 rounded-full text-sm ${ isDarkMode ? 'bg-blue-900/40' : 'bg-blue-100 text-blue-800' }`}
                         >
                           {tech}
                         </span>
@@ -281,11 +299,12 @@ const App = () => {
                   </motion.div>
                 ))}
               </motion.div>
-            </Tab.Panel>
-            
-            <Tab.Panel className={`rounded-xl ${
-              isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg'
-            } p-6`}>
+            </div>
+          </section>
+          
+          <section id="resume" ref={resumeRef} className="pt-16 -mt-16">
+            <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Resume</h2>
+            <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -301,17 +320,15 @@ const App = () => {
                   />
                 </div>
               </motion.div>
-            </Tab.Panel>
-          </Tab.Panels>
-        </Tab.Group>
+            </div>
+          </section>
+        </main>
         
         <motion.footer
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className={`text-center py-8 mt-16 border-t ${
-            isDarkMode ? 'border-white/10' : 'border-gray-200'
-          }`}
+          className={`text-center py-8 mt-16 border-t ${ isDarkMode ? 'border-white/10' : 'border-gray-200' }`}
         >
           <p className={isDarkMode ? 'text-gray-400' : 'text-gray-600'}>© Copyright 2025 Saunak Roy.</p>
         </motion.footer>

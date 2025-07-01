@@ -65,7 +65,7 @@ module.exports = {
           from: 'public/*.pdf',
           to: '[name][ext]'
         }
-      ]
+    ]
     })
   ],
   resolve: {
