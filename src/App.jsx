@@ -22,17 +22,17 @@ const staggerContainer = {
 };
 
 const navLinks = [
-  { name: 'About', href: '#about' },
+  { name: 'About', href: '#hero' },
   { name: 'Projects', href: '#projects' },
   { name: 'Resume', href: '#resume' },
 ];
 
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activeSection, setActiveSection] = useState('about');
+  const [activeSection, setActiveSection] = useState('hero');
 
   // Refs for each section
-  const aboutRef = useRef(null);
+  const heroRef = useRef(null);
   const projectsRef = useRef(null);
   const resumeRef = useRef(null);
 
@@ -50,13 +50,13 @@ const App = () => {
 
   useEffect(() => {
     const sectionRefs = [
-      { id: 'about', ref: aboutRef },
+      { id: 'hero', ref: heroRef },
       { id: 'projects', ref: projectsRef },
       { id: 'resume', ref: resumeRef },
     ];
     function onScroll() {
       const scrollPos = window.scrollY + window.innerHeight / 4;
-      let current = 'about';
+      let current = 'hero';
       for (let i = 0; i < sectionRefs.length; i++) {
         const section = sectionRefs[i].ref.current;
         if (section) {
@@ -180,86 +180,93 @@ const App = () => {
         )}
       </motion.button>
       
-      <div className="max-w-5xl mx-auto space-y-12 pt-24">
+      <div id="hero" ref={heroRef} className="max-w-5xl mx-auto space-y-24 pt-56">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-center"
+          className="flex flex-col md:flex-row items-center justify-between mb-8 gap-8"
         >
-          <div className="mb-6 flex justify-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              className="rounded-full border-4 border-white p-1 shadow-xl"
+          <div className="flex-1 w-full md:w-1/2 flex flex-col items-start">
+          <motion.h1 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            className="text-6xl font-bold mb-4"
+          >
+            {"Saunak Roy".split("").map((char, index) => (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ 
+                  duration: 2,
+                  delay: index * 0.1,
+                  ease: "easeOut"
+                }}
+              >
+                {char === " " ? "\u00A0" : char}
+              </motion.span>
+            ))}
+          </motion.h1>
+            <motion.div 
+              className="space-y-6 mb-6"
+              variants={staggerContainer}
+              initial="initial"
+              animate="animate"
             >
-              <img
-                src="/newpage/images/profile.jpg"
-                alt="Saunak Roy"
-                className="w-48 h-48 rounded-full object-cover object-[50%_35%]"
-              />
+              <motion.p 
+                className="text-lg leading-relaxed"
+                variants={fadeInUp}
+              >
+                Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the {' '}
+                <a href="#projects" className="text-blue-400 hover:text-blue-300 underline focus:outline-none">
+                  Projects
+                </a>
+                {' '}section to view several artifacts showcasing my diverse technical skill set.
+              </motion.p>
+            </motion.div>
+            <motion.div 
+              className="flex flex-row space-x-4 mt-2"
+              variants={staggerContainer}
+              initial="initial"
+              animate="animate"
+            >
+              {socialLinks.map((item, index) => (
+                <motion.a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`$${
+                    isDarkMode 
+                      ? 'text-gray-300 hover:text-white bg-white/10 hover:bg-white/20' 
+                      : 'text-gray-700 hover:text-gray-900 bg-gray-200 hover:bg-gray-300'
+                  } transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg text-base`}
+                  variants={fadeInUp}
+                >
+                  <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{item.icon}</span>
+                  <span>{item.name}</span>
+                </motion.a>
+              ))}
             </motion.div>
           </div>
-          <h1 className="text-4xl font-bold mb-8">Saunak Roy</h1>
-        </motion.div>
-        
-        <motion.div 
-          className="flex justify-center space-x-6 mb-8"
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-        >
-          {socialLinks.map((item, index) => (
-            <motion.a
-              key={item.name}
-              href={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`${
-                isDarkMode 
-                  ? 'text-gray-300 hover:text-white bg-white/10 hover:bg-white/20' 
-                  : 'text-gray-700 hover:text-gray-900 bg-gray-200 hover:bg-gray-300'
-              } transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg text-base`}
-              variants={fadeInUp}
-            >
-              <span className={isDarkMode ? 'text-white' : 'text-gray-900'}>{item.icon}</span>
-              <span>{item.name}</span>
-            </motion.a>
-          ))}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            className="rounded-full border-4 border-white p-1 shadow-xl w-64 h-64 flex-shrink-0"
+          >
+            <img
+              src="/newpage/images/profile.jpg"
+              alt="Saunak Roy"
+              className="w-full h-full rounded-full object-cover object-[50%_35%]"
+            />
+          </motion.div>
         </motion.div>
         
         <main className="space-y-24">
-          <section id="about" ref={aboutRef} className="pt-16 -mt-16">
-            <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>About Me</h2>
-            <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
-              <motion.div 
-                className="space-y-6"
-                variants={staggerContainer}
-                initial="initial"
-                animate="animate"
-              >
-                <motion.p 
-                  className="text-lg leading-relaxed"
-                  variants={fadeInUp}
-                >
-                  Hi! My name is Saunak Roy, and I'm a sophomore computer science and mathematics student at the University of Maryland, College Park. This site showcases several projects, research, and other experiences I've engaged in during my time as a student, where I've primarily explored my interests in the fields of machine learning and computer vision and their intersection with healthcare/medicine. I created this site to keep a record of my evolving skill set in computer science and easily share my work with students, professors, and employers.
-                </motion.p>
-                <motion.p 
-                  className="text-lg leading-relaxed"
-                  variants={fadeInUp}
-                >
-                  During my undergraduate years, I've been fascinated by the fields of machine learning, computer vision, and data science, and most of my work revolves around these fields. I'm curious to learn about the ways these fields intertwine and are applied in other fields, like healthcare. My goal is to enroll in a graduate program where I hope to further my exploration of these fields in depth by conducting cutting-edge research. I hope to maintain this portfolio throughout my career to highlight all the professional milestones I cross and the impactful academic/societal contributions I make. Click on the {' '}
-                  <a href="#projects" className="text-blue-400 hover:text-blue-300 underline focus:outline-none">
-                    Projects
-                  </a>
-                  {' '}section to view several artifacts showcasing my diverse technical skill set.
-                </motion.p>
-              </motion.div>
-            </div>
-          </section>
-          
-          <section id="projects" ref={projectsRef} className="pt-16 -mt-16">
+          <section id="projects" ref={projectsRef} className="pt-32 -mt-16">
             <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Projects</h2>
             <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
               <motion.div 
