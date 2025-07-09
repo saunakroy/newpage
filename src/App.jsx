@@ -141,6 +141,32 @@ const App = () => {
                   <a
                     key={link.name}
                     href={link.href}
+                    onClick={(e) => {
+                      if (link.href === '#projects') {
+                        e.preventDefault();
+                        const element = document.getElementById('projects');
+                        if (element) {
+                          const offset = -150; // Adjust this value as needed
+                          const elementPosition = element.offsetTop - offset;
+                          window.scrollTo({
+                            top: elementPosition,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }
+                      if (link.href === '#resume') {
+                        e.preventDefault();
+                        const element = document.getElementById('resume');
+                        if (element) {
+                          const offset = 20; // Adjust this value as needed
+                          const elementPosition = element.offsetTop - offset;
+                          window.scrollTo({
+                            top: elementPosition,
+                            behavior: 'smooth'
+                          });
+                        }
+                      }
+                    }}
                     className={`relative font-medium px-2 py-1 transition-colors ${isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}
                     style={{ zIndex: 1 }}
                   >
@@ -180,7 +206,7 @@ const App = () => {
         )}
       </motion.button>
       
-      <div id="hero" ref={heroRef} className="max-w-5xl mx-auto space-y-24 pt-56">
+      <div id="hero" ref={heroRef} className="max-w-5xl mx-auto space-y-14 pt-72">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -200,7 +226,7 @@ const App = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ 
-                  duration: 2,
+                  duration: 0.05,
                   delay: index * 0.1,
                   ease: "easeOut"
                 }}
@@ -210,22 +236,83 @@ const App = () => {
             ))}
           </motion.h1>
             <motion.div 
-              className="space-y-6 mb-6"
-              variants={staggerContainer}
-              initial="initial"
-              animate="animate"
-            >
-              <motion.p 
-                className="text-lg leading-relaxed"
-                variants={fadeInUp}
+        className="space-y-6 mb-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.p 
+          className="text-lg leading-relaxed"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          {`Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.split("").map((char, index) => {
+            const nameLength = "Saunak Roy".length;
+            const nameAnimationDelay = nameLength * 0.1; // Total time for name animation
+            
+            return (
+              <motion.span
+                key={index}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ 
+                  duration: 0.05,
+                  delay: nameAnimationDelay + (index * 0.02), // Start after name + faster speed
+                  ease: "easeOut"
+                }}
+                className="inline"
               >
-                Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the {' '}
-                <a href="#projects" className="text-blue-400 hover:text-blue-300 underline focus:outline-none">
-                  Projects
-                </a>
-                {' '}section to view several artifacts showcasing my diverse technical skill set.
-              </motion.p>
-            </motion.div>
+                {char}
+              </motion.span>
+            );
+          })}
+                     {`Projects`.split("").map((char, index) => {
+             const nameLength = "Saunak Roy".length;
+             const firstPartLength = `Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.length;
+             const nameAnimationDelay = nameLength * 0.1;
+             const firstPartDelay = firstPartLength * 0.02;
+             
+             return (
+               <motion.span
+                 key={`projects-${index}`}
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ 
+                   duration: 0.05,
+                   delay: nameAnimationDelay + firstPartDelay + (index * 0.02),
+                   ease: "easeOut"
+                 }}
+                 className="inline"
+               >
+                 {char}
+               </motion.span>
+             );
+           })}
+          {` section to view several artifacts showcasing my diverse technical skill set!`.split("").map((char, index) => {
+            const nameLength = "Saunak Roy".length;
+            const firstPartLength = `Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.length;
+            const nameAnimationDelay = nameLength * 0.1;
+            const firstPartDelay = firstPartLength * 0.02;
+            
+            return (
+              <motion.span
+                key={`end-${index}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ 
+                  duration: 0.05,
+                  delay: nameAnimationDelay + firstPartDelay + 0.3 + (index * 0.02), // After name + first part + "Projects" link
+                  ease: "easeOut"
+                }}
+                className="inline"
+              >
+                {char}
+              </motion.span>
+            );
+          })}
+        </motion.p>
+      </motion.div>
             <motion.div 
               className="flex flex-row space-x-4 mt-2"
               variants={staggerContainer}
@@ -266,7 +353,7 @@ const App = () => {
         </motion.div>
         
         <main className="space-y-24">
-          <section id="projects" ref={projectsRef} className="pt-32 -mt-16">
+          <section id="projects" ref={projectsRef} className="pt-60">
             <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Projects</h2>
             <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
               <motion.div 
