@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
+import { ReactTyped } from 'react-typed';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -65,7 +66,7 @@ const Navigation = ({ isDarkMode, activeSection }) => {
 };
 
 // About Page Component
-const AboutPage = ({ isDarkMode }) => {
+const AboutPage = ({ isDarkMode, hasAnimated, setHasAnimated }) => {
   const socialLinks = [
     {
       name: 'Email',
@@ -92,8 +93,31 @@ const AboutPage = ({ isDarkMode }) => {
     },
   ];
 
+  const [showCursor, setShowCursor] = useState(false);
+  const [nameTyped, setNameTyped] = useState(false);
+
+  useEffect(() => {
+    // Only run animation if it hasn't been played before
+    if (hasAnimated) {
+      setShowCursor(true);
+      setNameTyped(true);
+      return;
+    }
+  }, [hasAnimated]);
+
   return (
     <div className="min-h-screen flex items-center justify-center">
+      {/* Add the custom CSS for blinking animation */}
+      <style jsx>{`
+        @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+        }
+        .animate-blink {
+          animation: blink 1s infinite;
+        }
+      `}</style>
+      
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -107,20 +131,21 @@ const AboutPage = ({ isDarkMode }) => {
             transition={{ duration: 0.6 }}
             className="text-6xl font-bold mb-8"
           >
-            {"Saunak Roy".split("").map((char, index) => (
-              <motion.span
-                key={index}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ 
-                  duration: 0.05,
-                  delay: index * 0.1,
-                  ease: "easeOut"
-                }}
-              >
-                {char === " " ? "\u00A0" : char}
-              </motion.span>
-            ))}
+            {hasAnimated ? (
+              "Saunak Roy"
+            ) : (
+                              <ReactTyped
+                  strings={["Saunak Roy"]}
+                  typeSpeed={20}
+                  backSpeed={0}
+                  cursorChar="|"
+                  backDelay={0}
+                  loop={false}
+                  showCursor={false}
+                  onComplete={() => setNameTyped(true)}
+                  className="text-6xl font-bold"
+                />
+            )}
           </motion.h1>
           <motion.div 
             className="space-y-8 mb-8"
@@ -134,72 +159,37 @@ const AboutPage = ({ isDarkMode }) => {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6 }}
             >
-              {`Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.split("").map((char, index) => {
-                const nameLength = "Saunak Roy".length;
-                const nameAnimationDelay = nameLength * 0.1; // Total time for name animation
-                
-                return (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ 
-                      duration: 0.05,
-                      delay: nameAnimationDelay + (index * 0.02), // Start after name + faster speed
-                      ease: "easeOut"
-                    }}
-                    className="inline"
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })}
-              <Link to="/projects" className="text-blue-400 hover:text-blue-300 underline">
-                {`Projects`.split("").map((char, index) => {
-                  const nameLength = "Saunak Roy".length;
-                  const firstPartLength = `Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.length;
-                  const nameAnimationDelay = nameLength * 0.1;
-                  const firstPartDelay = firstPartLength * 0.02;
-                  
-                  return (
-                    <motion.span
-                      key={`projects-${index}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ 
-                        duration: 0.05,
-                        delay: nameAnimationDelay + firstPartDelay + (index * 0.02),
-                        ease: "easeOut"
+              {hasAnimated ? (
+                <>
+                  Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skill set!
+                  {showCursor && (
+                    <span className="animate-blink text-lg font-bold">|</span>
+                  )}
+                </>
+              ) : (
+                <>
+                  {nameTyped && (
+                    <ReactTyped
+                      strings={[
+                        "Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skill set!"
+                      ]}
+                      typeSpeed={2}
+                      backSpeed={0}
+                      backDelay={0}
+                      cursorChar="|"
+                      loop={false}
+                      showCursor={true}
+                      onComplete={() => {
+                        setShowCursor(true);
+                        setHasAnimated(true);
                       }}
-                      className="inline"
-                    >
-                      {char}
-                    </motion.span>
-                  );
-                })}
-              </Link>
-              {` section to view several artifacts showcasing my diverse technical skill set!`.split("").map((char, index) => {
-                const nameLength = "Saunak Roy".length;
-                const firstPartLength = `Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm broadly interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the `.length;
-                const nameAnimationDelay = nameLength * 0.1;
-                const firstPartDelay = firstPartLength * 0.02;
-                
-                return (
-                  <motion.span
-                    key={`end-${index}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ 
-                      duration: 0.05,
-                      delay: nameAnimationDelay + firstPartDelay + 0.3 + (index * 0.02), // After name + first part + "Projects" link
-                      ease: "easeOut"
-                    }}
-                    className="inline"
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })}
+                    />
+                  )}
+                  {showCursor && (
+                    <span className="animate-blink text-lg font-bold">|</span>
+                  )}
+                </>
+              )}
             </motion.p>
           </motion.div>
           <motion.div 
@@ -214,7 +204,7 @@ const AboutPage = ({ isDarkMode }) => {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`$${
+                className={`${
                   isDarkMode 
                     ? 'text-gray-300 hover:text-white bg-white/10 hover:bg-white/20' 
                     : 'text-gray-700 hover:text-gray-900 bg-gray-200 hover:bg-gray-300'
@@ -231,7 +221,7 @@ const AboutPage = ({ isDarkMode }) => {
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6 }}
-          className="rounded-full border-4 border-white p-1 shadow-xl w-64 h-64 flex-shrink-0"
+          className="rounded-full border-4 border-white p-1 shadow-xl w-80 h-80 flex-shrink-0"
         >
           <img
             src="/images/profile.jpg"
@@ -348,6 +338,7 @@ const ResumePage = ({ isDarkMode }) => {
 // Main App Component
 const App = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const bgColor = isDarkMode ? '#050d1a' : '#f0f4f8';
@@ -391,7 +382,7 @@ const App = () => {
         
         <div className="max-w-5xl mx-auto space-y-14">
           <Routes>
-            <Route path="/" element={<AboutPage isDarkMode={isDarkMode} />} />
+            <Route path="/" element={<AboutPage isDarkMode={isDarkMode} hasAnimated={hasAnimated} setHasAnimated={setHasAnimated} />} />
             <Route path="/projects" element={<ProjectsPage isDarkMode={isDarkMode} />} />
             <Route path="/resume" element={<ResumePage isDarkMode={isDarkMode} />} />
           </Routes>
