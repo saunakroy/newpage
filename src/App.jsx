@@ -161,7 +161,7 @@ const AboutPage = ({ isDarkMode, hasAnimated, setHasAnimated }) => {
             >
               {hasAnimated ? (
                 <>
-                  Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skill set!
+                  Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skills!
                   {showCursor && (
                     <span className="animate-blink text-lg font-bold">|</span>
                   )}
@@ -171,7 +171,7 @@ const AboutPage = ({ isDarkMode, hasAnimated, setHasAnimated }) => {
                   {nameTyped && (
                     <ReactTyped
                       strings={[
-                        "Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skill set!"
+                        "Hi! My name is Saunak Roy, and I'm a junior computer science and mathematics student at the University of Maryland, College Park. I'm interested in the fields of Data Science, Machine Learning, and Computer Vision, as well as their intersection with healthcare/medicine. Click on the Projects tab to check out my diverse skills!"
                       ]}
                       typeSpeed={2}
                       backSpeed={0}
@@ -240,35 +240,41 @@ const ProjectsPage = ({ isDarkMode }) => {
     {
       title: "Brain Tumor Classification",
       description: "Developed a custom CNN architecture and utilized transfer learning models like ResNet to classify MRI scans of brain tumors. Achieved an F1 score of 0.96 through data augmentation and regularization techniques. This project served as an introduction to computer vision and image classification fundamentals.",
-      technologies: ["Python", "TensorFlow", "CNN", "Transfer Learning", "OpenCV"],
+      technologies: ["Python", "NumPy", "Pandas", "TensorFlow", "OpenCV", "Keras", "Sci-kit learn"],
       link: "https://github.com/saunakroy/Brain-Tumor-Classification/blob/main/brainML.ipynb"
     },
     {
       title: "SIGCSE 2025 Research Paper",
       description: "Published research examining undergraduate AI literacy at UMD during the OUR Summer Research internship. Utilized R and NVivo for data analysis and visualization, uncovering correlations between students' technical AI knowledge and their perception of AI risks. Paper accepted and presented at ACM SIGCSE 2025 conference.",
-      technologies: ["R", "NVivo", "Data Analysis", "Research", "Data Visualization"],
+      technologies: ["R", "NVivo", "Data Science", "Research", "Data Analysis"],
       link: "https://drive.google.com/file/d/1PZYVS4tUz96Lc9AKLdC-QrCUDICeRBNJ/view"
     },
     {
       title: "TSP Algorithms Implementation",
       description: "Implemented and analyzed seven different algorithms for solving the Traveling Salesman Problem using Python. Created detailed visualizations comparing efficiency, runtime, and cost metrics. This comprehensive project enhanced algorithmic thinking skills through practical implementation.",
-      technologies: ["Python", "Algorithms", "Data Structures", "Optimization", "Data Visualization"],
+      technologies: ["Python", "NumPy", "Pandas", "Algorithms", "Optimization", "Data Visualization"],
       link: "https://github.com/saunakroy/Solving-TSP-HW/blob/main/Saunak_Roy_TSP.ipynb"
     },
     {
       title: "US Wage Analysis",
       description: "Developed a comprehensive tutorial analyzing 49 years of US wage data using data science and machine learning techniques. Implemented regression, ANOVA, and t-tests to assess wage impacts and predict trends, achieving R-squared values up to 0.95. Project completed as part of Introduction to Data Science coursework.",
-      technologies: ["Python", "Machine Learning", "Statistical Analysis", "Data Science", "Regression"],
+      technologies: ["Python", "NumPy", "Pandas", "Sci-kit learn", "Scipy", "Statistical Analysis", "Data Science"],
       link: "https://github.com/saunakroy/320-Final-Project/blob/main/320wagesfinalproject.ipynb"
+    },
+    {
+      title: "Personal Portfolio Website",
+      description: "Designed and developed a modern, responsive portfolio website showcasing my projects and skills. Features include smooth animations using Framer Motion, dark/light theme toggle, and a clean, professional design. Built with React and modern web technologies for optimal performance and user experience.",
+      technologies: ["React", "JavaScript", "Tailwind CSS", "Framer Motion"],
+      link: "https://saunakroy.github.io"
     }
   ];
 
   return (
-    <div className="pt-32">
+    <div className="pt-20">
       <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Projects</h2>
       <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
-        <motion.div 
-          className="space-y-8"
+        <motion.div
+          className="flex flex-wrap gap-8"
           variants={staggerContainer}
           initial="initial"
           animate="animate"
@@ -276,7 +282,7 @@ const ProjectsPage = ({ isDarkMode }) => {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              className={`border ${ isDarkMode ? 'border-white/20 hover:bg-white/[0.05]' : 'border-gray-200 hover:bg-blue-50' } rounded-lg p-6 transition-colors`}
+              className={`w-full md:w-[48%] border ${ isDarkMode ? 'border-white/20 hover:bg-white/[0.05]' : 'border-gray-200 hover:bg-blue-50' } rounded-lg p-6 transition-colors flex flex-col`}
               variants={fadeInUp}
             >
               <div className="flex justify-between items-start mb-2">
@@ -291,7 +297,7 @@ const ProjectsPage = ({ isDarkMode }) => {
                 </a>
               </div>
               <p className={isDarkMode ? 'text-gray-300 mb-4' : 'text-gray-700 mb-4'}>{project.description}</p>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mt-auto">
                 {project.technologies.map((tech, techIndex) => (
                   <span
                     key={techIndex}
@@ -312,7 +318,7 @@ const ProjectsPage = ({ isDarkMode }) => {
 // Resume Page Component
 const ResumePage = ({ isDarkMode }) => {
   return (
-    <div className="pt-32">
+    <div className="pt-20">
       <h2 className={`text-3xl font-bold mb-8 text-center ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>Resume</h2>
       <div className={`rounded-xl ${ isDarkMode ? 'bg-white/[0.05]' : 'bg-white shadow-lg' } p-6`}>
         <motion.div 

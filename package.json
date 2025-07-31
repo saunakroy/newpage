@@ -37,9 +37,11 @@
   "dependencies": {
     "bootstrap": "^5.3.6",
     "framer-motion": "^11.0.8",
+    "globe.gl": "^2.42.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.30.1",
-    "react-typed": "^2.0.12"
+    "react-typed": "^2.0.12",
+    "three": "^0.178.0"
   }
 }
