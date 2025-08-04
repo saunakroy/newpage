@@ -1,4 +1,3 @@
-# saunakroy.github.io
-Portfolio website
+# Portfolio website
 
 Created using React, Tailwind CSS, Framer Motion.
