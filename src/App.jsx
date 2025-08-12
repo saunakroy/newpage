@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { EnvelopeIcon } from '@heroicons/react/24/outline';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import { ReactTyped } from 'react-typed';
+
+// Redirect handling for GitHub Pages SPA
+const RedirectHandler = () => {
+  useEffect(() => {
+    // Check if we're on GitHub Pages and need to handle the redirect
+    const query = window.location.search;
+    if (query.includes('?/')) {
+      const path = query.replace('?/', '').replace(/~and~/g, '&');
+      window.history.replaceState(null, null, path);
+    }
+  }, []);
+  return null;
+};
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -364,6 +377,7 @@ const App = () => {
 
   return (
     <Router>
+      <RedirectHandler />
       <div className={`min-h-screen ${isDarkMode ? 'bg-[#050d1a] text-white' : 'bg-[#f0f4f8] text-gray-900'} p-4 pb-16 transition-colors duration-200`}>
         <Navigation isDarkMode={isDarkMode} />
         

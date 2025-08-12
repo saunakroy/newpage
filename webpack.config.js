@@ -64,6 +64,10 @@ module.exports = {
         {
           from: 'public/*.pdf',
           to: '[name][ext]'
+        },
+        {
+          from: 'public/404.html',
+          to: '404.html'
         }
     ]
     })
